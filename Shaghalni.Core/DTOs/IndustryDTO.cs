@@ -1,13 +1,14 @@
-﻿using Shaghalni.Core.Models;
+﻿using Shaghalni.Core.DTOs.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shaghalni.Core.Interfaces
+namespace Shaghalni.Core.DTOs
 {
-    public interface ISkillRepository : IBaseRepository<Skill>
+    public class IndustryDTO : BaseDictionaryDTO
     {
+
     }
 }

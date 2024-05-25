@@ -8,6 +8,8 @@ using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
+using Shaghalni.Api.Enums;
 
 namespace Shaghalni.Core.Models.Employees
 {
@@ -18,9 +20,9 @@ namespace Shaghalni.Core.Models.Employees
         public string PhoneNumber { get; set; }
         public string SecondaryPhoneNumber { get; set; }
         public int ExperienceYears { get; set; }
-        public string Gender { get; set; }
+        public Gender Gender { get; set; }
         public bool IsWillingToRelocate { get; set; }
-        public string MilitaryStatus { get; set; }
+        public MilitaryStatus MilitaryStatus { get; set; }
         public int MinSalary { get; set; }
         public string Nationality { get; set; }
         public string Photo { get; set; }
