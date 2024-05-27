@@ -1,9 +1,4 @@
 ﻿using Shaghalni.Core.DTOs.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Shaghalni.Core.DTOs.Companies
 {
@@ -21,6 +16,11 @@ namespace Shaghalni.Core.DTOs.Companies
         public CompanyTypeDTO CompanyType { get; set; }
 
         public int CompanyIndustryId { get; set; }
-        public int CompanyIndustryId { get; set; }
+        public CompanyIndustryDTO CompanyIndustry { get; set; }
+
+        public string City { get; set; }
+        public string Country { get; set; }
+
+        public List<CompanyLinkDTO> CompanyLinks { get; set; }
     }
 }

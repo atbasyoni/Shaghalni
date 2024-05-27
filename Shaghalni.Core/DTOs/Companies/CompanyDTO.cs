@@ -1,12 +1,7 @@
 ﻿using Shaghalni.Core.DTOs.Helpers;
 using Shaghalni.Core.Models.Companies;
 using Shaghalni.Core.Models.Jobs;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Shaghalni.Core.DTOs.Companies
 {

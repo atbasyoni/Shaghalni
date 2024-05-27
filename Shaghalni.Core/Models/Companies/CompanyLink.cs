@@ -12,6 +12,6 @@ namespace Shaghalni.Core.Models.Companies
         public string Link { get; set; }
 
         public int CompanyId { get; set; }
-        public virtual Company Company { get; set; }
+        public Company Company { get; set; }
     }
 }

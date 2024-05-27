@@ -15,17 +15,18 @@ namespace Shaghalni.Core.Models.Companies
         public string PhoneNumber { get; set; }
         public DateTime YearFounded { get; set; }
 
-        public int CompanyIndustryId { get; set; }
-        public virtual CompanyIndustry CompanyIndustry { get; set; }
+        public int? CompanyIndustryId { get; set; }
+        public CompanyIndustry CompanyIndustry { get; set; }
 
-        public int CompanySizeId { get; set; }
-        public virtual CompanySize CompanySize { get; set; }
+        public int? CompanySizeId { get; set; }
+        public CompanySize CompanySize { get; set; }
 
-        public int CompanyTypeId { get; set; }
-        public virtual CompanyType CompanyType { get; set; }
+        public int? CompanyTypeId { get; set; }
+        public CompanyType CompanyType { get; set; }
 
-        public List<CompanyLink> CompanyLinks { get; set; }
         public List<Job> Jobs { get; set; }
+        public List<CompanyLink> Links { get; set; }
         public List<CompanyManager> Managers { get; set; }
+        public List<CompanyCity> Locations { get; set; }
     }
 }

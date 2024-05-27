@@ -31,6 +31,12 @@ namespace Shaghalni.EF.Data
             builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");
             builder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
             builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
+
+            builder.Entity<CompanyCity>().HasKey(e => new { e.CityId , e.CompanyId });
+            builder.Entity<EmployeeJobCategory>().HasKey(e => new { e.JobCategoryId , e.EmployeeId });
+            builder.Entity<EmployeeSkill>().HasKey(e => new { e.SkillId , e.EmployeeId });
+            builder.Entity<EmployeeJobType>().HasKey(e => new { e.JobTypeId , e.EmployeeId });
+            builder.Entity<JobSkill>().HasKey(e => new { e.SkillId , e.JobId });
         }
 
         // Jobs

@@ -1,13 +1,7 @@
-﻿using Shaghalni.Core.DTOs.Helpers;
-using Shaghalni.Api;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Shaghalni.Api.Enums;
+﻿using Shaghalni.Api.Enums;
+using Shaghalni.Core.DTOs.Helpers;
 using Shaghalni.Core.DTOs.Jobs;
+using System.ComponentModel.DataAnnotations;
 
 namespace Shaghalni.Core.DTOs.Employees
 {

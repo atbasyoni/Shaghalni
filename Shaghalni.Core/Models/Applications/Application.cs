@@ -20,16 +20,16 @@ namespace Shaghalni.Core.Models.Applications
         public bool IsArchived { get; set; }
         public string WithdrawReason { get; set; }
 
-        public int JobId { get; set; }
-        public virtual Job Job { get; set; }
+        public int? JobId { get; set; }
+        public Job Job { get; set; }
 
-        public int EmployeeId { get; set; }
-        public virtual Employee Employee { get; set; }
+        public int? EmployeeId { get; set; }
+        public Employee Employee { get; set; }
 
-        public int ApplicationStatusId { get; set; }
-        public virtual ApplicationStatus ApplicationStatus { get; set; }
+        public int? ApplicationStatusId { get; set; }
+        public ApplicationStatus ApplicationStatus { get; set; }
 
-        public int CompanyApplicationStatusId { get; set; }
-        public virtual CompanyApplicationStatus CompanyApplicationStatus { get; set; }
+        public int? CompanyApplicationStatusId { get; set; }
+        public CompanyApplicationStatus CompanyApplicationStatus { get; set; }
     }
 }

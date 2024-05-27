@@ -12,6 +12,6 @@ namespace Shaghalni.Core.Models.Employees
         public string Link { get; set; }
 
         public int EmployeeId { get; set; }
-        public virtual Employee Employee { get; set; }
+        public Employee Employee { get; set; }
     }
 }

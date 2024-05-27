@@ -1,12 +1,16 @@
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Shaghalni.Core;
 using Shaghalni.Core.Interfaces;
 using Shaghalni.Core.Models.Accounts;
 using Shaghalni.EF;
 using Shaghalni.EF.Data;
+using Shaghalni.EF.Helpers;
 using Shaghalni.EF.Repositories;
+using System.Text;
 
 namespace Shaghalni.Api
 {
@@ -31,6 +35,26 @@ namespace Shaghalni.Api
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            builder.Services.AddScoped<JwtHandler>();
+
+            builder.Services.AddAuthentication(option =>
+            {
+                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(option =>
+            {
+                option.SaveToken = true;
+                option.RequireHttpsMetadata = false;
+                option.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
+                    ValidateAudience = true,
+                    ValidAudience = builder.Configuration["JWT:ValidAudience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
+                };
+            });
 
             var app = builder.Build();
 
@@ -43,8 +67,8 @@ namespace Shaghalni.Api
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapControllers();
 

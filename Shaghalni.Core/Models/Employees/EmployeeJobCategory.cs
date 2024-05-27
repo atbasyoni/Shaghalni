@@ -10,9 +10,9 @@ namespace Shaghalni.Core.Models.Employees
     public class EmployeeJobCategory
     {
         public int EmployeeId { get; set; }
-        public virtual Employee Employee { get; set; }
+        public Employee Employee { get; set; }
 
         public int JobCategoryId { get; set; }
-        public virtual JobCategory JobCategory { get; set; }
+        public JobCategory JobCategory { get; set; }
     }
 }

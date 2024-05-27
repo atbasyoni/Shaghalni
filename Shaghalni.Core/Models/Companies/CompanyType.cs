@@ -9,7 +9,6 @@ namespace Shaghalni.Core.Models.Companies
 {
     public class CompanyType : DictionaryTable
     {
-        public int CompanyId { get; set; }
-        public virtual Company Company { get; set; }
+        public List<Company> Companies { get; set; }
     }
 }

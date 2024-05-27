@@ -11,7 +11,7 @@ namespace Shaghalni.Core.Models
 {
     public class CareerLevel : DictionaryTable
     {
-        public List<Employee> Employees { get; set; }
+        public List<Employee>? Employees { get; set; }
         public List<JobDetails> Job_Details { get; set; }
     }
 }
