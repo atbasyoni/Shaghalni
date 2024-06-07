@@ -13,15 +13,15 @@ namespace Shaghalni.Core.Models.Jobs
     {
         public string Title { get; set; }
         public int NumberOfVacancies { get; set; }
-        public int ViewedApplication { get; set; }
-        public int WithdrawnApplications { get; set; }
-        public int AcceptedApplications { get; set; }
-        public int InConsiderationApplications { get; set; }
-        public int RejectedApplications { get; set; }
-        public int TotalApplications { get; set; }
+        public int? ViewedApplication { get; set; }
+        public int? WithdrawnApplications { get; set; }
+        public int? AcceptedApplications { get; set; }
+        public int? InConsiderationApplications { get; set; }
+        public int? RejectedApplications { get; set; }
+        public int? TotalApplications { get; set; }
         public bool IsOpen { get; set; }
         public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
+        public string? UpdatedBy { get; set; }
         public JobDetails JobDetails { get; set; }
 
         public int? CompanyId { get; set; }

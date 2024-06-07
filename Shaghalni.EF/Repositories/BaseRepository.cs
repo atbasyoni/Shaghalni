@@ -58,9 +58,38 @@ namespace Shaghalni.EF.Repositories
             return await query.ToListAsync();
         }
 
+        public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> criteria = null, string[] includes = null)
+        {
+            IQueryable<T> query = _context.Set<T>();
+            
+            if (includes is not null)
+            {
+                foreach(var include in includes)
+                    query = query.Include(include);
+            }
+
+            if (criteria is not null)
+                query.Where(criteria);
+
+            return await query.ToListAsync();
+        }
+
         public async Task<T> FindAsync(Expression<Func<T, bool>> criteria)
         {
             return await _context.Set<T>().SingleOrDefaultAsync(criteria);
+        }
+
+        public async Task<T> FindAsync(Expression<Func<T, bool>> criteria, string[] includes = null)
+        {
+            IQueryable<T> query = _context.Set<T>();
+
+            if (includes is not null)
+            {
+                foreach (var include in includes)
+                    query = query.Include(include);
+            }
+
+            return await query.SingleOrDefaultAsync(criteria);
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()

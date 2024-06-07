@@ -13,7 +13,7 @@ namespace Shaghalni.Core.Models.Companies
         public string Logo { get; set; }
         public string AboutUs { get; set; }
         public string PhoneNumber { get; set; }
-        public DateTime YearFounded { get; set; }
+        public int YearFounded { get; set; }
 
         public int? CompanyIndustryId { get; set; }
         public CompanyIndustry CompanyIndustry { get; set; }

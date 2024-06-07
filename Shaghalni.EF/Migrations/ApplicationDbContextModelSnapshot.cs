@@ -17,7 +17,7 @@ namespace Shaghalni.EF.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.5")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -454,8 +454,8 @@ namespace Shaghalni.EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("YearFounded")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("YearFounded")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -931,7 +931,7 @@ namespace Shaghalni.EF.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AcceptedApplications")
+                    b.Property<int?>("AcceptedApplications")
                         .HasColumnType("int");
 
                     b.Property<int?>("CityId")
@@ -950,7 +950,7 @@ namespace Shaghalni.EF.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("InConsiderationApplications")
+                    b.Property<int?>("InConsiderationApplications")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
@@ -968,24 +968,23 @@ namespace Shaghalni.EF.Migrations
                     b.Property<int>("NumberOfVacancies")
                         .HasColumnType("int");
 
-                    b.Property<int>("RejectedApplications")
+                    b.Property<int?>("RejectedApplications")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TotalApplications")
+                    b.Property<int?>("TotalApplications")
                         .HasColumnType("int");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ViewedApplication")
+                    b.Property<int?>("ViewedApplication")
                         .HasColumnType("int");
 
-                    b.Property<int>("WithdrawnApplications")
+                    b.Property<int?>("WithdrawnApplications")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -1048,12 +1047,6 @@ namespace Shaghalni.EF.Migrations
                     b.Property<int?>("EducationLevelId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ExperienceMax")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ExperienceMin")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -1061,6 +1054,18 @@ namespace Shaghalni.EF.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("JobId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxExperience")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxSalary")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinExperience")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinSalary")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("ModifiedDate")
@@ -1075,12 +1080,6 @@ namespace Shaghalni.EF.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("SalaryCurrencyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SalaryMax")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SalaryMin")
                         .HasColumnType("int");
 
                     b.Property<int>("SalaryRateId")

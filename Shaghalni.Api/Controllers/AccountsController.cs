@@ -18,7 +18,7 @@ namespace Shaghalni.Api.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> RegisterAsync(RegisterDTO model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             var result = await _authRepository.RegisterAsync(model);

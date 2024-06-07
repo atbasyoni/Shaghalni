@@ -17,7 +17,7 @@ namespace Shaghalni.Core.DTOs.Companies
         public string PhoneNumber { get; set; }
 
         [Required]
-        public DateTime YearFounded { get; set; }
+        public int YearFounded { get; set; }
 
         public int CompanyIndustryId { get; set; }
 
