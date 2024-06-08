@@ -43,8 +43,8 @@ namespace Shaghalni.EF.Profiles
                 .ForMember(dest => dest.SalaryCurrencySymbol, opt => opt.MapFrom(src => src.SalaryCurrency.Symbol))
                 .ForMember(dest => dest.SalaryCurrencyCode, opt => opt.MapFrom(src => src.SalaryCurrency.Code));
 
-            CreateMap<ApplicationUser, RegisterDTO>();
-            CreateMap<RegisterDTO, ApplicationUser>();
+            CreateMap<ApplicationUser, RegisterRequestDTO>();
+            CreateMap<RegisterRequestDTO, ApplicationUser>();
         }
     }
 }

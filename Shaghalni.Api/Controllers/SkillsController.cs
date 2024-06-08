@@ -41,6 +41,9 @@ namespace Shaghalni.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AddSkillAsync(SkillDTO model)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var newSkill = _mapper.Map<Skill>(model);
 
             await _unitOfWork.Skills.AddAsync(newSkill);
@@ -67,7 +70,7 @@ namespace Shaghalni.Api.Controllers
             return Ok(skill);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSkillAsync(int id)
         {
             var skill = _unitOfWork.Skills.Delete(id);

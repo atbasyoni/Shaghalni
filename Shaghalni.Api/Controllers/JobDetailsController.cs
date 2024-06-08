@@ -37,6 +37,9 @@ namespace Shaghalni.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AddAsync(JobDetailsDTO model)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var newJobDetails = _mapper.Map<JobDetails>(model);
 
             await _unitOfWork.JobDetails.AddAsync(newJobDetails);

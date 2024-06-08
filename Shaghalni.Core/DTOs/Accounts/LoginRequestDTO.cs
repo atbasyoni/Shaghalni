@@ -2,7 +2,7 @@
 
 namespace Shaghalni.Core.DTOs.Accounts
 {
-    public class LoginDTO
+    public class LoginRequestDTO
     {
         [Required(ErrorMessage = "Email is required.")]
         public string Email { get; set; }

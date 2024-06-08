@@ -1,12 +1,11 @@
 ﻿using Shaghalni.Core.DTOs.Accounts;
-using Shaghalni.Core.Models.Accounts;
 
 namespace Shaghalni.Core.Interfaces
 {
     public interface IAuthRepository
     {
-        Task<AuthModel> RegisterAsync(RegisterDTO model);
-        Task<AuthModel> LoginAsync(LoginDTO model);
+        Task<AuthResponseDTO> RegisterAsync(RegisterRequestDTO model);
+        Task<AuthResponseDTO> LoginAsync(LoginRequestDTO model);
         Task<string> AddRoleAsync(RoleDTO model);
         Task<bool> RevokeTokenAsync(string token);
         Task<string> ConfirmEmail(string userId, string token);

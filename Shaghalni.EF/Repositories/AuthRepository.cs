@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -45,6 +46,80 @@ namespace Shaghalni.EF.Repositories
             _jwtHandler = jwtHandler;
         }
 
+        public async Task<AuthResponseDTO> LoginAsync(LoginRequestDTO model)
+        {
+            var response = new AuthResponseDTO();
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user is null || !await _userManager.CheckPasswordAsync(user, model.Password))
+            {
+                response.Message = "Email or Password is incorrect";
+                return response;
+            }
+
+            var token = await CreatJwtToken(user);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            response.UserName = user.UserName;
+            response.Email = user.Email;
+            response.IsAuthenticated = true;
+            response.Roles = roles.ToList();
+            response.Token = new JwtSecurityTokenHandler().WriteToken(token);
+            response.ExpiresOn = token.ValidTo;
+
+            if (user.RefreshTokens.Any(r => r.IsActive))
+            {
+                var activeRefershToken = user.RefreshTokens.SingleOrDefault(r => r.IsActive);
+                response.RefreshToken = activeRefershToken.Token;
+                response.RefreshTokenExpiration = activeRefershToken.ExpiredOn;
+            }
+            else
+            {
+                var refreshToken = GenerateRefreshToken();
+                response.RefreshToken = refreshToken.Token;
+                response.RefreshTokenExpiration = refreshToken.ExpiredOn;
+            }
+
+            return response;
+        }
+
+        public async Task<AuthResponseDTO> RegisterAsync(RegisterRequestDTO model)
+        {
+            if (await _userManager.FindByNameAsync(model.UserName) is not null)
+                return new AuthResponseDTO() { Message = "Username is alerady registered!" };
+
+            if (await _userManager.FindByEmailAsync(model.Email) is not null)
+                return new AuthResponseDTO() { Message = "Email is already registered!" };
+
+            var user = _mapper.Map<ApplicationUser>(model);
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (!result.Succeeded)
+            {
+                var errors = string.Empty;
+                foreach (var error in result.Errors)
+                {
+                    errors += $"{error.Description},";
+                }
+                return new AuthResponseDTO() { Message = errors };
+            }
+
+            await _userManager.AddToRoleAsync(user, "User");
+
+            var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var urlCodedEmailConfirmationToken = CodeTokenToURL(emailConfirmationToken);
+            _emailSender.ConfirmEmailEmail(urlCodedEmailConfirmationToken, user);
+
+            return new AuthResponseDTO
+            {
+                IsAuthenticated = true,
+                Message = "User registered successfully",
+            };
+
+        }
+
         public async Task<string> AddRoleAsync(RoleDTO model)
         {
             var user = await _userManager.FindByIdAsync(model.UserId);
@@ -64,7 +139,7 @@ namespace Shaghalni.EF.Repositories
         {
             var user = await _userManager.FindByIdAsync(userId);
 
-            if (user == null)
+            if (user is null)
             {
                 return "Invalid UserId";
             }
@@ -90,92 +165,12 @@ namespace Shaghalni.EF.Repositories
         {
             var user = await _userManager.FindByEmailAsync(email);
 
-            if (user != null)
+            if (user is not null)
             {
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
                 _emailSender.ResetPasswordEmail(token, user);
             }
-
-        }
-
-        public async Task<AuthModel> LoginAsync(LoginDTO model)
-        {
-            var authModel = new AuthModel();
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user is null || !await _userManager.CheckPasswordAsync(user, model.Password))
-            {
-                authModel.Message = "Email or Password is incorrect";
-                return authModel;
-            }
-
-            var token = await CreatJwtToken(user);
-            var roles = await _userManager.GetRolesAsync(user);
-
-            authModel.UserName = user.UserName;
-            authModel.Email = user.Email;
-            authModel.IsAuthenticated = true;
-            authModel.Roles = roles.ToList();
-            authModel.Token = new JwtSecurityTokenHandler().WriteToken(token);
-            authModel.ExpiresOn = token.ValidTo;
-
-            if (user.RefreshTokens.Any(r => r.IsActive))
-            {
-                var activeRefershToken = user.RefreshTokens.SingleOrDefault(r => r.IsActive);
-                authModel.RefreshToken = activeRefershToken.Token;
-                authModel.RefreshTokenExpiration = activeRefershToken.ExpiredOn;
-            }
-            else
-            {
-                var refreshToken = GenerateRefreshToken();
-                authModel.RefreshToken = refreshToken.Token;
-                authModel.RefreshTokenExpiration = refreshToken.ExpiredOn;
-            }
-            return authModel;
-        }
-
-        public async Task<AuthModel> RegisterAsync(RegisterDTO model)
-        {
-            if (await _userManager.FindByNameAsync(model.UserName) is not null)
-                return new AuthModel() { Message = "Username is alerady registered!" };
-
-            if (await _userManager.FindByEmailAsync(model.Email) is not null)
-                return new AuthModel() { Message = "Email is already registered!" };
-
-            var user = _mapper.Map<ApplicationUser>(model);
-
-            var result = await _userManager.CreateAsync(user, model.Password);
-
-            if (!result.Succeeded)
-            {
-                var errors = string.Empty;
-                foreach (var error in result.Errors)
-                {
-                    errors += $"{error.Description},";
-                }
-                return new AuthModel() { Message = errors };
-            }
-
-            await _userManager.AddToRoleAsync(user, "User");
-
-            var token = await CreatJwtToken(user);
-
-            var refreshToken = GenerateRefreshToken();
-            user.RefreshTokens.Add(refreshToken);
-            await _userManager.UpdateAsync(user);
-
-            return new AuthModel
-            {
-                UserName = user.UserName,
-                Email = user.Email,
-                Token = new JwtSecurityTokenHandler().WriteToken(token),
-                ExpiresOn = token.ValidTo,
-                IsAuthenticated = true,
-                Message = "Registration Successed",
-                Roles = new List<string>() { "User" },
-                RefreshToken = refreshToken.Token,
-                RefreshTokenExpiration = refreshToken.ExpiredOn
-            };
 
         }
 
@@ -193,11 +188,16 @@ namespace Shaghalni.EF.Repositories
                 return "The Password doesn't match confirmed password.";
             }
 
-            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+            var result = await _userManager.ResetPasswordAsync(user, model.Token!, model.Password!);
 
             if (!result.Succeeded)
             {
-                return "An error occurred while changing your password.";
+                var errors = string.Empty;
+                foreach (var error in result.Errors)
+                {
+                    errors += $"{error.Description},";
+                }
+                return errors;
             }
 
             return result.ToString();
@@ -211,13 +211,21 @@ namespace Shaghalni.EF.Repositories
                 return false;
 
             var refreshToken = user.RefreshTokens.Single(t => t.Token == token);
+           
             if (!refreshToken.IsActive)
                 return false;
 
             refreshToken.RevokedOn = DateTime.UtcNow;
 
             await _userManager.UpdateAsync(user);
+
             return true;
+        }
+
+        private string CodeTokenToURL(string token)
+        {
+            byte[] tokenGeneratedBytes = Encoding.UTF8.GetBytes(token);
+            return WebEncoders.Base64UrlEncode(tokenGeneratedBytes);
         }
 
         public string DecodeToken(string token)
@@ -230,7 +238,9 @@ namespace Shaghalni.EF.Repositories
         {
             var RandomNumber = new Byte[32];
             using var generator = new RNGCryptoServiceProvider();
+
             generator.GetBytes(RandomNumber);
+
             return new RefreshToken
             {
                 Token = Convert.ToBase64String(RandomNumber),

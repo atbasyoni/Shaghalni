@@ -16,7 +16,7 @@ namespace Shaghalni.Api.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<IActionResult> RegisterAsync(RegisterDTO model)
+        public async Task<IActionResult> RegisterAsync(RegisterRequestDTO model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -26,12 +26,12 @@ namespace Shaghalni.Api.Controllers
             if (!result.IsAuthenticated)
                 return BadRequest(result.Message);
 
-            SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiration);
-            return Ok(result);
+            //SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiration);
+            return Ok(new { Message = result.Message, IsSuccessed = result.IsAuthenticated });
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> LoginAsync(LoginDTO model)
+        public async Task<IActionResult> LoginAsync(LoginRequestDTO model)
         {
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -62,15 +62,13 @@ namespace Shaghalni.Api.Controllers
 
             await _authRepository.ForgetPassword(email);
 
-            return Ok("Your email address has been successfully confirmed");
+            return Ok("If there is an account with the provided email address, we will send a message to it.");
         }
 
         [HttpPost("ResetPassword")]
         public async Task<IActionResult> ResetPassword(ResetPasswordDTO model)
         {
-            await _authRepository.ResetPassword(model);
-
-            return Ok("Password reset successfully.");
+            return Ok(await _authRepository.ResetPassword(model));
         }
 
         [HttpPost("RevokeToken")]

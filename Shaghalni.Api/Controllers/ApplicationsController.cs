@@ -41,13 +41,16 @@ namespace Shaghalni.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AddApplicationAsync(ApplicationDTO model)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var newApplication = _mapper.Map<Application>(model);
 
             await _unitOfWork.Applications.AddAsync(newApplication);
 
             await _unitOfWork.Complete();
 
-            return Ok(newApplication);
+            return CreatedAtAction("AddApplication", new { Id = newApplication.Id });
         }
 
         [HttpPut]

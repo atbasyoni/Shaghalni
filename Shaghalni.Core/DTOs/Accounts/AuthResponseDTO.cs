@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shaghalni.Core.Models.Accounts
+namespace Shaghalni.Core.DTOs.Accounts
 {
-    public class AuthModel
+    public class AuthResponseDTO
     {
         public string? UserName { get; set; }
         public string? Email { get; set; }

@@ -40,6 +40,9 @@ namespace Shaghalni.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCompanyAsync(CompanyDTO model)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var newCompany = _mapper.Map<Company>(model);
 
             await _unitOfWork.Companies.AddAsync(newCompany);

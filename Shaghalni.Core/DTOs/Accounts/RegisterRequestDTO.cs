@@ -2,7 +2,7 @@
 
 namespace Shaghalni.Core.DTOs.Accounts
 {
-    public class RegisterDTO
+    public class RegisterRequestDTO
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
